@@ -7,5 +7,12 @@
 </head>
 <body>
     <h1>Login page</h1>
+    {% comment %} as_p를 해주면 각각의 context가 들여쓰기로 된다. {% endcomment %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">로그인</button>
+    </form>
+    
 </body>
 </html>
