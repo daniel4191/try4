@@ -1,18 +1,12 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body>
-    <h1>Sign Up</h1>
+{% extends "base.html" %}
+{% block content %}
+<div id="signup">
     <form action="" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{form.as_p}}
-        <button type="submit">회원가입</button>
+            <h1>Sign Up</h1>
+            {% csrf_token %}
+            {{form.as_p}}
+        <button type="submit" class="btn btn-signup">회원가입</button>
+        <a href="/users/login/">로그인 페이지로 이동</a>
     </form>
-</body>
-</html>
+</div>
+{% endblock  %}
