@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .models import Post
 
 # Create your views here.
 def feeds(request):
@@ -10,5 +11,8 @@ def feeds(request):
     print("is_authenticated:", is_authenticated) # 위에서 설정된 is_authenticated로 인해서 해당 user가 정상접근인지 확인,
     # 만약 로그인 되어있지 않으면 False가 나온다.
     
-    return render(request, "posts/feeds.html")
+    # 모든 글 목록을 템플릿으로 전달
+    posts = Post.objects.all()
+    context = {"posts":posts}
+    return render(request, "posts/feeds.html", context)
 
