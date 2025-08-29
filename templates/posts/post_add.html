@@ -1,6 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
-<div id="post-add">
-    <h1>Post add</h1>
-</div>
+    <nav>
+        <h1>
+            <a href="/posts/feeds/">햄스터</a>
+        </h1>
+        <a href="/users/logout/">logout</a>
+    </nav>
+    <div id="post-add">
+        <h1>Post 작성</h1>
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div>
+                <label for="id_images">이미지</label>
+                <input type="file" id="id_images" name="images" multiple>
+            </div>
+            {{form.as_p}}
+            <button type="submit">게시</button>
+        </form>
+    </div>
 {% endblock  %}

@@ -3,8 +3,8 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 
-from .models import Post, Comment
-from .forms import CommentForm
+from .models import Post, Comment, PostImage
+from .forms import CommentForm, PostForm
 
 # Create your views here.
 def feeds(request):
@@ -59,6 +59,28 @@ def comment_delete(request, comment_id):
             return HttpResponseForbidden("이 댓글을 삭제할 권한이 없습니다.")
         
 def post_add(request):
-    return render(request, "posts/post_add.html")
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
+            
+            for image_file in request.FILES.getlist("images"):
+                # request.FILES로 가져온 파일은 models의 ImageField 부분에 바로 할당됨
+                PostImage.objects.create(
+                    post = post,
+                    photo = image_file
+                )
+            # 모든 PostImage와 Post 생성이 완료되면
+            # 피드 페이지로 이동하여 생성된 Post의 위치로 스크롤
+            url = f"/posts/feeds/#post-{post.id}"
+            return HttpResponseRedirect(url)
+    # GET 요청일때는 빈 form을 보여준다.
+    else:
+        form = PostForm()
+    context = {"form":form}
+    return render(request, "posts/post_add.html", context)
     
     
