@@ -9,8 +9,10 @@ from .forms import CommentForm, PostForm
 # Create your views here.
 def feeds(request):
     user = request.user
-    
     is_authenticated = user.is_authenticated
+    
+    if not user.is_authenticated:
+        return redirect("/users/login2/")
     
     print("user:", user) # user는 현재 로그인 중인 계정
     print("is_authenticated:", is_authenticated) # 위에서 설정된 is_authenticated로 인해서 해당 user가 정상접근인지 확인,

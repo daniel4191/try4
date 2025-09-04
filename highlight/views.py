@@ -7,5 +7,5 @@ def index(request):
         return redirect("/posts/feeds/")
     # 로그인 되어있지 않은 경우, 로그인 페이지로
     else:
-        return redirect("/users/login/")
+        return redirect("/users/login2/")
     # return render(request, "index.html")

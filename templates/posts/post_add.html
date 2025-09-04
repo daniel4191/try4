@@ -2,9 +2,9 @@
 {% block content %}
     <nav>
         <h1>
-            <a href="/posts/feeds/">햄스터</a>
+            <a href="{% url 'posts/feeds' %}">햄스터</a>
         </h1>
-        <a href="/users/logout/">logout</a>
+        <a href="{% url 'users/logout' %}">logout</a>
     </nav>
     <div id="post-add">
         <h1>Post 작성</h1>

@@ -2,10 +2,10 @@
 {% block content %}
     <nav>
         <h1>
-            <a href="/posts/feeds/">햄스터</a>
+            <a href="{% url 'posts/feeds' %}">햄스터</a>
         </h1>
-        <a href="/posts/post_add/">Add Post</a>
-        <a href="/users/logout/">Logout</a>
+        <a href="{% url 'posts/post_add' %}">Add Post</a>
+        <a href="{% url 'users/logout' %}">Logout</a>
     </nav>
     <div id="feeds" class="post-container">
         {% for post in posts %}
@@ -52,7 +52,7 @@
 
                                 <!-- 댓글 삭제 form 추가-->
                                 {% if user == comment.user %}
-                                    <form action="/posts/comment_delete/{{comment.id}}/" method="post">
+                                    <form action="{% url 'posts/comment_delete' comment_id=comment.id %}" method="post">
                                         {% csrf_token %}
                                         <button type="submit">삭제</button>
                                     </form>
@@ -66,7 +66,7 @@
                 <!-- 작성일자, 댓글 입력 창 시작-->
                 <small>{{post.created}} </small>
                 <div class="post-comment-create">
-                    <form action="/posts/comment_add/" method="post">
+                    <form action="{% url 'posts/comment_add' %}" method="post">
                         {% csrf_token %}
                         <input type="hidden" name="post" value="{{post.id}}">
                         <!--{{ comment_form.as_p}} 
