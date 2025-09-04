@@ -5,7 +5,7 @@ from .models import User
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect("/posts/feeds/")
+        return redirect("posts:feeds")
     
     # 만약 request 메서드가 post라면(templates의 html에서)
     if request.method == "POST":
@@ -23,7 +23,7 @@ def login_view(request):
             if user:
                 # 로그인 처리 후 피드페이지로 리다이렉트
                 login(request, user)
-                return redirect("/posts/feeds/")
+                return redirect("posts:feeds")
             # 사용자가 없다면 실패 출력
             else:
                 form.add_error(None, "입력한 자격증명에 해당하는 사용자가 없습니다.")
@@ -38,7 +38,7 @@ def login_view(request):
     
 def logout_view(request):
     logout(request)
-    return redirect("/users/login2/")
+    return redirect("users:login")
 
 def signup(request):
     if request.method == "POST":
@@ -46,7 +46,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect("/users/feeds/")
+            return redirect("posts:feeds")
     else:    
         form = SignForm()
         context = {"form": form}

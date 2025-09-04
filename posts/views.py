@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.urls import reverse
 
 from .models import Post, Comment, PostImage
 from .forms import CommentForm, PostForm
@@ -48,7 +49,11 @@ def comment_add(request):
         print(comment.content)
         print(comment.user)
         
-        return HttpResponseRedirect(f"/posts/feeds/#post-{comment.post.id}")
+        # 동적 URL 처리 전
+        # return HttpResponseRedirect(f"/posts/feeds/#post-{comment.post.id}")
+        # 동적 URL 처리 후
+        url = reverse("posts:feeds") + f"#post-{comment.post.id}"
+        return HttpResponseRedirect(url)
     
 @require_POST
 def comment_delete(request, comment_id):
@@ -56,7 +61,11 @@ def comment_delete(request, comment_id):
         comment = Comment.objects.get(id = comment_id)
         if comment.user == request.user:
             comment.delete()
-            return HttpResponseRedirect(f"/posts/feeds/#post-{comment.post.id}")
+            # 동적 URL 처리 전
+            # return HttpResponseRedirect(f"/posts/feeds/#post-{comment.post.id}")
+            # 동적 URL 처리 후
+            url = reverse("posts:feeds") + f"#post-{comment.post.id}"
+            return HttpResponseRedirect(url)
         else:
             return HttpResponseForbidden("이 댓글을 삭제할 권한이 없습니다.")
         
@@ -75,9 +84,13 @@ def post_add(request):
                     post = post,
                     photo = image_file
                 )
+            # 동적 URL 처리 전
             # 모든 PostImage와 Post 생성이 완료되면
             # 피드 페이지로 이동하여 생성된 Post의 위치로 스크롤
-            url = f"/posts/feeds/#post-{post.id}"
+            # url = f"/posts/feeds/#post-{post.id}"
+            # return HttpResponseRedirect(url)
+            # 동적 URL 처리 후
+            url = reverse("posts:feeds") + f"#post-{post.id}"
             return HttpResponseRedirect(url)
     # GET 요청일때는 빈 form을 보여준다.
     else:
