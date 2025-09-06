@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.urls import reverse
 
-from .models import Post, Comment, PostImage
+from .models import Post, Comment, PostImage, HashTag
 from .forms import CommentForm, PostForm
 
 # Create your views here.
@@ -84,6 +84,13 @@ def post_add(request):
                     post = post,
                     photo = image_file
                 )
+                
+            tag_string = request.POST.get("tags")
+            if tag_string:
+                tag_names = [tag_name.strip() for tag_name in tag_string.split(",")]
+                for tag_name in tag_names:
+                    tag, _ = HashTag.objects.get_or_create(name = tag_name)
+                    post.tags.add(tag)
             # 동적 URL 처리 전
             # 모든 PostImage와 Post 생성이 완료되면
             # 피드 페이지로 이동하여 생성된 Post의 위치로 스크롤
@@ -98,4 +105,17 @@ def post_add(request):
     context = {"form":form}
     return render(request, "posts/post_add.html", context)
     
+def tags(request, tag_name):
+    try:
+        tag = HashTag.objects.get(name = tag_name)
+    except HashTag.DoesNotExist:
+        # tag_name에 해당 하는 HashTag를 찾지 못한 경우, 빈 쿼리셋을 리턴
+        posts = Post.objects.none()
+    else:
+        posts = Post.objects.filter(tags = tag)
     
+    context = {
+        'tag_name': tag_name,
+        "posts":posts
+    }
+    return render(request, "posts/tags.html", context)

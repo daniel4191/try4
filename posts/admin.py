@@ -2,8 +2,10 @@
 import admin_thumbnails
 
 from django.contrib import admin
+from django.db.models import ManyToManyField
+from django.forms import CheckboxSelectMultiple
 
-from .models import Post, PostImage, Comment
+from .models import Post, PostImage, Comment, HashTag
 
 # Register your models here.
 class CommentInline(admin.TabularInline):
@@ -26,6 +28,11 @@ class PostAdmin(admin.ModelAdmin):
         PostImageInline
         ]
     
+    # Post 변경 화면에서 ManyToManyField를 Checkbox로 출력
+    formfield_overrides = {
+        ManyToManyField: {"widget": CheckboxSelectMultiple}
+    }
+    
 @admin.register(PostImage)
 class PostImageAdmin(admin.ModelAdmin):
     list_display = [
@@ -42,3 +49,6 @@ class CommentAdmin(admin.ModelAdmin):
         "content"
     ]
 
+@admin.register(HashTag)
+class HashTagAdmin(admin.ModelAdmin):
+    pass
